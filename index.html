@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- manifest="currency.appcache" lang="en" -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+
+    <title>Outrun</title>
+
+    <link rel="stylesheet" type="text/css" href="media/css/normalize.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="media/css/Project.css">
+
+    <link rel="icon" sizes="128x128" href="media/images/icon.png"/>
+    <link rel="apple-touch-icon" href="media/images/icon.png"/>
+    <link rel="shortcut icon" href="media/images/icon.png" type="image/x-icon"/>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCT7onenxAhtz03s2_vD1D5DnBiXm3GuIM&libraries=drawing"
+            async defer></script>
+    <script src="model/gmaps.js"></script>
+    <!-- Contains modified code from w3schools.com -->
+    <!-- Contains modified code from official bootstrap documentation: https://getbootstrap.com/docs/4.1/getting-started/introduction/ -->
+</head>
+
+<body>
+
+<div id="mapScreen">
+    <div class="container-fluid screen" id="mapContainer">
+        <div id="pedoCountDiv">
+            <div class="label label-default ml-3" id="pedoCount">Steps: Disabled</div>
+        </div>
+        <div id="map">
+
+        </div>
+    </div>
+
+    <button type="button" class="btn btn-primary position-absolute" id="mapStartButton" data-toggle="modal"
+            data-target="#startDialog">Start
+    </button>
+    <button type="button" class="btn btn-primary position-absolute" id="mapRaceButton" data-toggle="modal"
+            data-target="#raceDialog">Outrun
+    </button>
+    <button type="button" class="btn btn-primary position-absolute" id="mapFinishButton" disabled>Finish</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="startDialog" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="startModalLongTitle">Enter the run's name.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input class="form-control" type="text" maxlength="60" id="destinationInput"
+                       placeholder="Run name must be 15 chars or less.">
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="mapStartCancelButton" class="btn btn-secondary  mr-auto" data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary " id="mapStartConfirmButton">Start
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="raceDialog" tabindex="-1" role="dialog"
+     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="raceModalLongTitle">Select which run name to race against.</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <select class="form-control" id="selectName">
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="mapRaceCancelButton" class="btn btn-secondary  mr-auto" data-dismiss="modal">
+                    Cancel
+                </button>
+                <button type="button" class="btn btn-primary " id="mapRaceConfirmButton" data-dismiss="modal">Select
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="settingsScreen">
+    <div class="container-fluid screen">
+
+        <div class="page-header pb-4 pt-3">
+            <span class="text-center"> <h1>Settings</h1></span>
+        </div>
+
+        <div class="card col-sm-8 offset-sm-2">
+            <ul class="list-group list-group-flush ">
+                <li class="list-group-item card">
+                    <label class="">
+                        Armband Mode:
+                    </label>
+                    <label class="switch  float-right">
+                        <input type="checkbox" id="armbandToggle"></input>
+                        <span class="slider round"></span>
+                    </label>
+
+                </li>
+
+                <li class="list-group-item card">
+                    <label class="">
+                        Pedometer:
+                    </label>
+                    <label class="switch  float-right">
+                        <input type="checkbox" id="pedometerToggle" onchange="turnOnPedo()"></input>
+                        <span class="slider round"></span>
+                    </label>
+
+                </li>
+
+                <li class="list-group-item card">
+                    <label class="mt-1">
+                        Reset all settings:
+                    </label>
+                    <button id = "resetButDialogSummon"type="button" class="btn btn-sm btn-warning float-right" data-toggle="modal"
+                            data-target="#resetConfirm">Reset
+                    </button>
+                </li>
+
+                <!-- Modal -->
+                <div class="modal fade" id="resetConfirm" tabindex="-1" role="dialog"
+                     aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="resetModalLongTitle">Confirm reset of all data?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                This will delete all saved information and settings.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary  mr-auto" data-dismiss="modal">Cancel
+                                </button>
+                                <button type="button" class="btn btn-warning " id="resetButton"
+                                        data-dismiss="modal">Reset
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </ul>
+        </div>
+
+        <div id="warning" class="card col-sm-8 offset-sm-2">
+            Warning: This app is not intended for use while in vehicles.
+        </div>
+    </div>
+</div>
+
+
+<div id="statsScreen">
+    <div class="container-fluid  screen">
+
+        <div class="page-header pb-4 pt-3">
+            <span class="text-center"> <h1>Records</h1></span>
+        </div>
+
+
+        <table class="table table-striped" id="statsTable">
+            <thead class="thead-light">
+            <tr>
+                <th scope="col" style="width: 18%">Date</th>
+                <th scope="col" style="width: 30%">Name</th>
+                <th scope="col" style="width: 22%">Time (hh:mm:ss)</th>
+            </tr>
+            </thead>
+            <tbody id="statsTableBody">
+
+            </tbody>
+        </table>
+
+
+    </div>
+</div>
+
+<ul class="nav nav-pills nav-fill fixed-bottom" id="menubar">
+    <li class="nav-item" id="navStats">
+        <a class="nav-link" id="menuStats"><img class="menuItem" src="media/images/stats.svg" alt="Stats"></a>
+    </li>
+    <li class="nav-item activeTab" id="navMap">
+        <a class="nav-link" id="menuMap"><img class="menuItem" src="media/images/map.svg" alt="Run"></a>
+    </li>
+    <li class="nav-item" id="navSettings">
+        <a class="nav-link" id="menuSettings"><img class="menuItem" src="media/images/settings.svg" alt="Settings"></a>
+    </li>
+</ul>
+
+<script src="model/ProjectModel.js"></script>
+<script src="view/ProjectView.js"></script>
+<script src="controller/ProjectController.js"></script>
+<script src="shake.js"></script>
+<script src="NoSleep.js"></script>
+
+
+<script>
+
+
+    var pedoSlider = document.getElementById("pedometerToggle");
+    var counter = document.getElementById("pedoCount");
+
+    function turnOnPedo() {
+        if (pedoSlider.checked) {
+            myShakeEvent.start();
+        }
+        else {
+            myShakeEvent.stop();
+        }
+    }
+
+    var myShakeEvent = new Shake({threshold: 2, timeout: 200});
+
+
+    window.addEventListener('shake', shakeEventDidOccur, false);
+
+    function shakeEventDidOccur() {
+        var pedoEnabled = document.getElementById("pedometerToggle").checked;
+        var num = counter.innerHTML;
+
+        if (!pedoEnabled) {
+            counter.innerHTML = "Steps: Disabled";
+        } else{
+            num = num.replace("Steps: ", "");
+            if (num == "Disabled") {
+                num = 0;
+            }
+
+            num = parseInt(num);
+            num++;
+            counter.innerHTML = "Steps: " + num.toString();
+        }
+
+
+    }
+
+
+    var noSleep = new NoSleep();
+
+    var wakeLockEnabled = false;
+    var toggleEl = document.querySelector("#armbandToggle");
+    toggleEl.addEventListener('click', function() {
+        if (!wakeLockEnabled) {
+            noSleep.enable(); // keep the screen on!
+            wakeLockEnabled = true;
+        } else {
+            noSleep.disable(); // let the screen turn off.
+            wakeLockEnabled = false;
+        }
+    }, false);
+
+
+
+
+
+
+
+
+</script>
+
+
+</body>
+</html>
