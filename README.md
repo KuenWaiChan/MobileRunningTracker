@@ -2,40 +2,33 @@
 
 ## File Structure
 
-Leave HTML files in root
+HTML Files in root
 
 ### Media
 
 - CSS - stylesheets
 - Images - static images
-- Add new folder for animation gifs etc...
 
 ### Model
 
-- PHP/JS for model
+- JS
 
 ### Controller
 
-- Controller code...
+- Controller
 
 ### View
 
-- JavaScript for modifying view 
+- JavaScript
 
 ### Documentation
 
-- Posters, reports etc needed for submission
+- Posters, reports etc
 
-## Group members
-
-Jack MacLauchlan @rkb16165
-
-Elliot Rourke @ywb16155
-
-Kuen Wai Chan @xbb15134
-
-Gordon Clark @ntb15144
-
-Scott Pirrie @mjb15165
-
-Karol Groszewski @cxb15176
+## Participants
+K. Chan
+J. MacLauchlan @rkb16165
+E. Rourke @ywb16155
+G. Clark
+S. Pirrie
+K. Groszewski
