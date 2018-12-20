@@ -27,8 +27,13 @@ HTML Files in root
 
 ## Participants
 K. Chan
+
 J. MacLauchlan @rkb16165
+
 E. Rourke @ywb16155
+
 G. Clark
+
 S. Pirrie
+
 K. Groszewski
